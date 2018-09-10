@@ -3,27 +3,25 @@ class Ship {
     constructor() {
         //  circle frame radius
         this.r = 0.04;
-        // angle of rear part ofthe ship (alternating between + and minus)
-        this.rearA = 50;
+        // angle of rear part ofthe ship (alternating between plus and minus)
+        this.rearA = 40;
         // front of the ship angle
         this.a = 0;
         this.x = VAR.W / 2;
         this.y = VAR.H / 2;
 
-
-        //addition ship props for acceleration
-        // x difference from the middle of canvas
+        // addition ship property for acceleration
         this.modX = 0;
         this.modY = 0;
         // acceleration
-        this.acc = 0.0004;
+        this.acc = 0.0006;
 
         // max speed
         this.maxMod = 0.019;
 
         // container for ship's coordinates
         this.points = [{}, {}, {}];
-    }
+    };
 
     // draw method
     draw() {
@@ -36,7 +34,7 @@ class Ship {
         // adding acceleration
         if (Game.key_38) {
             this.modX = Math.max(-this.maxMod * VAR.d, Math.min(this.maxMod * VAR.d, this.modX + Math.sin(Math.PI / 180 * this.a) * this.acc * VAR.d));
-            this.modY = this.modY - Math.cos(Math.PI / 180 * this.a) * this.acc * VAR.d;
+            this.modY = this.modY - Math.cos(Math.PI / 180 * this.a) * this.acc * VAR.d; // wprowadzic ograniczenie predkosci
 
             // ship slows down after relesaing a button
         } else {
@@ -47,7 +45,7 @@ class Ship {
             this.modY = this.modY * 0.98;
             this.modY = Math.abs(this.modY) < 0.0001 ? 0 : this.modY;
 
-        }
+        };
 
         // speeding up
         this.x += this.modX;
@@ -60,22 +58,46 @@ class Ship {
             // loop through every peak of triangle
             // new temporary angle (tempA) used for drawing
             this.tempA = i === 0 ? this.a : (this.a + 180 + (i == 1 ? this.rearA : -this.rearA));
-            this.tempR = i === 0 ? this.r : (this.r * 0.7);
+            this.tempR = i === 0 ? this.r : (this.r * 0.6);
             // saving coordinated in 'this.points array' - point's coordinates calculated based on middle of circle
             this.points[i].x = Math.sin(Math.PI / 180 * this.tempA) * this.tempR * VAR.d + this.x;
             this.points[i].y = -Math.cos(Math.PI / 180 * this.tempA) * this.tempR * VAR.d + this.y;
             // telling canvas to draw lines between points - one stroke is missing
             Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x, this.points[i].y);
 
-        }
+        };
         // adding last stroke with 'closePath' to close a triangle shape
         Game.ctx.closePath();
         Game.ctx.stroke();
 
         // drawing flames behind ship
         Game.ctx.beginPath();
-        if (Game.key_38) {
+        if (Game.key_38 && this.thrust) { // this.thrust toggles active each frame - it causes flame to keep 'blinking'
+            this.thrust = false;
+            for (let i = 0; i < 3; i++) {
+                this.tempA = i != 1 ? this.a + 180 + (i === 0 ? -this.rearA + 14 : this.rearA - 14) : this.a + 180;
+                this.tempR = i != 1 ? this.r * 0.5 : this.r;
+                Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](
+                    Math.sin(Math.PI / 180 * this.tempA) * this.tempR * VAR.d + this.x,
+                    - Math.cos(Math.PI / 180 * this.tempA) * this.tempR * VAR.d + this.y
+                );
+            };
+            Game.ctx.stroke();
+        } else if (Game.key_38 && !this.thrust) {
+            this.thrust = true;
+        };
 
-        }
+        // detection if ship left window  + Math.max(this.points[0].x, this.points[1].x, this.points[2].x) * 0.9)
+        // when ship leaves a screen it will be redrawn on the opisite side
+        if (this.points[0].x < 0 && this.points[1].x < 0 && this.points[2].x < 0) {
+            this.x += VAR.W - Math.min(this.points[0].x, this.points[1].x, this.points[2].x) * 0.9;
+        } else if (this.points[0].x > VAR.W && this.points[1].x > VAR.W && this.points[2].x > VAR.W) {
+            this.x -= VAR.W + (Math.max(this.points[0].x, this.points[1].x, this.points[2].x) - VAR.W) * 0.9;
+        } else if (this.points[0].y < 0 && this.points[1].y < 0 && this.points[2].y < 0) {
+            this.y += VAR.H - Math.min(this.points[0].y, this.points[1].y, this.points[2].y) * 0.9;
+        } else if (this.points[0].y > VAR.H && this.points[1].y > VAR.H && this.points[2].y > VAR.H) {
+            this.y -= VAR.H + (Math.max(this.points[0].y, this.points[1].y, this.points[2].y) - VAR.H) * 0.9;
+        };
+
     }
-} 
+}
