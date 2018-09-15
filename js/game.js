@@ -64,7 +64,10 @@ Game = {
                     Game.key_39 = false;
                 } if (e.keyCode == 39) {
                     Game.key_37 = false;
-                }
+                } else if (e.keyCode == 32) {
+                    Game.key_32 = false;
+                    new Bullet();
+                };
 
                 // stop rotation after key release
             } else if (e.type == 'keyup') {
@@ -97,7 +100,9 @@ Game = {
             // clearing previous frame            
             Game.ctx.clearRect(0, 0, VAR.W, VAR.H);
             // drawing ship instance in every frame
+
             Game.ship.draw();
+            Bullet.draw();
         };
     },
 }

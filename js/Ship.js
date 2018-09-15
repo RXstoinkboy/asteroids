@@ -17,7 +17,7 @@ class Ship {
         this.acc = 0.0006;
 
         // max speed
-        this.maxMod = 0.019;
+        this.maxMod = 0.025;
 
         // container for ship's coordinates
         this.points = [{}, {}, {}];
@@ -34,7 +34,7 @@ class Ship {
         // adding acceleration
         if (Game.key_38) {
             this.modX = Math.max(-this.maxMod * VAR.d, Math.min(this.maxMod * VAR.d, this.modX + Math.sin(Math.PI / 180 * this.a) * this.acc * VAR.d));
-            this.modY = this.modY - Math.cos(Math.PI / 180 * this.a) * this.acc * VAR.d; // wprowadzic ograniczenie predkosci
+            this.modY = Math.max(-this.maxMod * VAR.d, Math.min(this.maxMod * VAR.d, this.modY - Math.cos(Math.PI / 180 * this.a) * this.acc * VAR.d));
 
             // ship slows down after relesaing a button
         } else {
