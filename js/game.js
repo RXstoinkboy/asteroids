@@ -26,7 +26,9 @@ Game = {
 
         // drawing canvas
         Game.canvas = document.createElement('canvas');
+        Game.hit_canvas = document.createElement('canvas') // canvas for hit detection - fills rocks and check if there are no other color pixels inside
         Game.ctx = Game.canvas.getContext('2d');
+        Game.hit_ctx = Game.hit_canvas.getContext('2d');
 
         // initializing layout function
         Game.layout();
@@ -34,7 +36,12 @@ Game = {
         // dynamic resize tracking
         window.addEventListener('resize', Game.layout, false)
 
+        document.body.appendChild(Game.hit_canvas);
         document.body.appendChild(Game.canvas);
+
+        for (let i = 0; i < 4; i++) {
+            new Rock(1);
+        };
 
         // calling ship instance
         Game.ship = new Ship()
@@ -83,9 +90,14 @@ Game = {
         VAR.H = window.innerHeight;
 
         VAR.d = Math.min(VAR.H, VAR.W);
+
+        Game.hit_canvas.width = VAR.W;
+        Game.hit_canvas.height = VAR.H;
+
         Game.canvas.width = VAR.W;
         Game.canvas.height = VAR.H;
 
+        Game.hit_ctx.fillStyle = "red";
         Game.ctx.fillStyle = 'white';
         Game.ctx.strokeStyle = 'white';
         Game.ctx.lineWidth = 3;
@@ -97,12 +109,15 @@ Game = {
         requestAnimationFrame(Game.animationLoop);
         if (time - VAR.lastTime >= 1000 / VAR.fps) {
             VAR.lastTime = time;
-            // clearing previous frame            
+            // clearing previous frame    
+            Game.hit_ctx.clearRect(0, 0, VAR.W, VAR.H);
             Game.ctx.clearRect(0, 0, VAR.W, VAR.H);
             // drawing ship instance in every frame
 
             Game.ship.draw();
+            Rock.draw();
             Bullet.draw();
+            Rock.draw();
         };
     },
 }

@@ -17,7 +17,7 @@ class Ship {
         this.acc = 0.0006;
 
         // max speed
-        this.maxMod = 0.025;
+        this.maxMod = 0.019;
 
         // container for ship's coordinates
         this.points = [{}, {}, {}];

@@ -38,7 +38,7 @@ function Bullet() {
         this.modY = -Math.cos(Math.PI / 180 * this.a) * Bullet.speed * VAR.d;
         // how bullet position get modified during its flight
 
-    }
+    };
 
 
     // drawing bullet
