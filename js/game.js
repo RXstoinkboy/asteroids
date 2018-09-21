@@ -36,11 +36,11 @@ Game = {
         // dynamic resize tracking
         window.addEventListener('resize', Game.layout, false)
 
-        document.body.appendChild(Game.hit_canvas);
+        // document.body.appendChild(Game.hit_canvas);
         document.body.appendChild(Game.canvas);
 
         for (let i = 0; i < 4; i++) {
-            new Rock(1);
+            new Rock(2);
         };
 
         // calling ship instance
@@ -110,14 +110,13 @@ Game = {
         if (time - VAR.lastTime >= 1000 / VAR.fps) {
             VAR.lastTime = time;
             // clearing previous frame    
-            Game.hit_ctx.clearRect(0, 0, VAR.W, VAR.H);
             Game.ctx.clearRect(0, 0, VAR.W, VAR.H);
             // drawing ship instance in every frame
 
             Game.ship.draw();
+
             Rock.draw();
             Bullet.draw();
-            Rock.draw();
         };
     },
 }

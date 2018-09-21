@@ -29,6 +29,28 @@ function Rock(size, x, y) {
         });
     }
 };
+// collision detection
+Rock.prototype.hitTest = function (x, y) {
+    if (x > this.x - this.r * VAR.d && x < this.x + this.r * VAR.d && y > this.y - this.r * VAR.d && y < this.y + this.r * VAR.d) {
+        //
+        Game.hit_ctx.clearRect(this.x - this.r * VAR.d, this.y - this.r * VAR.d, this.r * 2 * VAR.d, this.r * 2 * VAR.d);
+        //
+        Game.hit_ctx.beginPath();
+        for (let i = 0; i < this.points.length; i++) {
+            // hit_ctx rocks drawing
+            Game.hit_ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
+        };
+        Game.hit_ctx.closePath();
+        Game.hit_ctx.fill();
+        //
+        if (Game.hit_ctx.getImageData(x, y, 1, 1).data[0] == 255) { // x,y coordinates, 1px by 1px area tested
+            return true;
+        }
+    }
+    return false;
+
+};
+
 
 // method for each Rock instance
 Rock.prototype.draw = function () {
@@ -47,18 +69,27 @@ Rock.prototype.draw = function () {
     };
 
     Game.ctx.beginPath();
-    Game.hit_ctx.beginPath();
+
     for (let i = 0; i < this.points.length; i++) {
-        Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
         // hit_ctx rocks drawing
+        Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
         Game.hit_ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
     };
-    // hit_ctx methods
-    Game.hit_ctx.closePath();
-    Game.hit_ctx.fill();
     // ctx methods
+
     Game.ctx.closePath();
     Game.ctx.stroke();
+};
+
+// method to remove Rocks
+Rock.prototype.remove = function () {
+    // if Rock was medium or large -> generate new smaller rock
+    if (this.size > 0) {
+        for (let i = 0, j = VAR.rand(2, 4); i < j; i++) {
+            new Rock(this.size - 1, this.x, this.y);
+        }
+    }
+    delete Rock.all[this.id];
 };
 
 // method for whole Rock object
