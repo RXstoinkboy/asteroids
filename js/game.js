@@ -54,6 +54,11 @@ Game = {
         Game.animationLoop();
     },
 
+    stop: () => {
+        window.removeEventListener('keydown', Game.onKey, false);
+        window.removeEventListener('keyup', Game.onKey, false);
+    },
+
     // steering
     onKey: (e) => {
 
@@ -116,6 +121,7 @@ Game = {
             Game.ship.draw();
 
             Rock.draw();
+            Dot.draw();
             Bullet.draw();
         };
     },
