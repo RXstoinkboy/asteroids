@@ -83,6 +83,7 @@ Rock.prototype.draw = function () {
 
 // method to remove Rocks
 Rock.prototype.remove = function () {
+    Sound.play('bum' + VAR.rand(1, 2));
     // if Rock was medium or large -> generate new smaller rock
     if (this.size > 0) {
         for (let i = 0, j = VAR.rand(2, 4); i < j; i++) {
@@ -101,4 +102,8 @@ Rock.draw = function () {
         Rock.num++;
         Rock.all[k].draw();
     };
+    if (Rock.num === 0 && !Game.success) {
+        Game.success = true;
+        Sound.play('win');
+    }
 };

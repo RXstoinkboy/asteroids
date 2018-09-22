@@ -105,6 +105,15 @@ class Ship {
                     this.thrust = true;
                 };
 
+                if (Game.key_38 && (!Game.thrust_sound || Game.thrust_sound <= 0)) {
+                    Game.thrust_sound = 60;
+                    Sound.play('thrust');
+                } else if (Game.key_38 && Game.thrust_sound) {
+                    Game.thrust_sound -= 1000 / VAR.fps;
+                } else if (!Game.key_38) {
+                    Game.thrust_sound = false;
+                };
+
                 // detection if ship left window  + Math.max(this.points[0].x, this.points[1].x, this.points[2].x) * 0.9)
                 // when ship leaves a screen it will be redrawn on the opisite side
                 if (this.points[0].x < 0 && this.points[1].x < 0 && this.points[2].x < 0) {

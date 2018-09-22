@@ -23,7 +23,7 @@ VAR = {
 // Game to nie jest typowy zmienna, tylko obiekt przypisany do window
 Game = {
     init: () => {
-
+        Sound.init();
         // drawing canvas
         Game.canvas = document.createElement('canvas');
         Game.hit_canvas = document.createElement('canvas') // canvas for hit detection - fills rocks and check if there are no other color pixels inside
