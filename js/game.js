@@ -1,6 +1,8 @@
 // onload oznacza, że elementy ładują się po tym jak wszystkie elemtny okna się już załadują
-window.onload = function () {
 
+
+window.onload = function () {
+    
     Game.init();
 };
 
