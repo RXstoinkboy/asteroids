@@ -1,5 +1,4 @@
 // onload oznacza, że elementy ładują się po tym jak wszystkie elemtny okna się już załadują
-const Sound = require('./sound.js');
 
 window.onload = function () {
 
@@ -25,6 +24,7 @@ VAR = {
 // Game to nie jest typowy zmienna, tylko obiekt przypisany do window
 Game = {
     init: () => {
+
         Sound.init();
         // drawing canvas
         Game.canvas = document.createElement('canvas');

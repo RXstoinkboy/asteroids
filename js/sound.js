@@ -1,4 +1,4 @@
-let Sound = {
+Sound = {
     active: false,
     init: function () {
         Sound.fx = new Howl({
@@ -22,5 +22,3 @@ let Sound = {
         }
     }
 }
-
-module.exports = Sound;
