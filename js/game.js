@@ -1,8 +1,8 @@
 // onload oznacza, że elementy ładują się po tym jak wszystkie elemtny okna się już załadują
-
+const Sound = require('./sound.js');
 
 window.onload = function () {
-    
+
     Game.init();
 };
 
